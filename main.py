@@ -46,7 +46,7 @@ def download_video(search_query):
         os.makedirs(output_dir)
     
     ydl_opts = {
-        'format': 'bestvideo[height<=144]+bestaudio/best[height<=144]',
+        'format': 'bestvideo[height<=1080]+bestaudio/best[height<=1080]',
         'outtmpl': os.path.join(output_dir, '%(title)s.%(ext)s'),
         'default_search': 'ytsearch',
         'quiet': True
