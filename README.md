@@ -23,7 +23,8 @@
 python -m venv .venv
 
  Для Windows 
-.venv\Scripts\activate \n
+.venv\Scripts\activate
+
  Для Mac / Linux
 source venv/bin/activate
 
