@@ -13,7 +13,7 @@
 
 # Клонировать репозиторий:
 ```bash
-   git clone [https://github.com/quasarusx/ytdlp-cli.git](https://github.com/quasarusx/ytdlp-cli.git)
+   git clone [https://github.com/quasarusx/ytdlp-cli.git]
    cd ytdlp-cli
 ```
 
