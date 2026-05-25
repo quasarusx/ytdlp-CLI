@@ -22,8 +22,8 @@
 Создайте виртуальное окружение (рекомендуется):
 python -m venv .venv
 
- Для Windows
-.venv\Scripts\activate
+ Для Windows 
+.venv\Scripts\activate \n
  Для Mac / Linux
 source venv/bin/activate
 
