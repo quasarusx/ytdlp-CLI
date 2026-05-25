@@ -11,7 +11,7 @@
 
 Для корректной работы программы необходим Python 3.7 и утилита FFMPEG (обязательна для работы yt-dlp)
 
-#Клонировать репозиторий:
+# Клонировать репозиторий:
 bash
    git clone [https://github.com/quasarusx/ytdlp-cli.git](https://github.com/quasarusx/ytdlp-cli.git)
    cd ytdlp-cli
