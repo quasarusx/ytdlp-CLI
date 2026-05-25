@@ -35,16 +35,18 @@ pip install -r requirements.txt
 python main.py
 
 
-Cборка в автономный .exe файл
+# Cборка в автономный .exe файл
+
 Внутри виртуального окружения установите pyinstaller:
+
 pip install pyinstaller
 
 Запустите сборку:
+
 pyinstaller --onefile main.py
 
 Готовый файл появится в папке dist/
 
-Здесь заканчивается ваш основной текст README.
 
 ```text
 //      //  ///////      //////    //          ///////   
