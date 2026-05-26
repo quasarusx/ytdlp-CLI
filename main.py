@@ -4,6 +4,7 @@ import subprocess
 import tkinter as tk
 from tkinter import filedialog
 import json
+from datetime import datetime 
 
 
 root = tk.Tk()
@@ -12,6 +13,56 @@ root.withdraw()
 CONFIG_FILE = "config.json"
 DEFAULT_VIDEO_PATH = r"C:\ytdlp-cli\downloads\video"
 DEFAULT_AUDIO_PATH = r"C:\ytdlp-cli\downloads\audio"
+HISTORY_DIR = "history"
+
+
+def save_to_history(download_type, query, saved_path):
+    if not os.path.exists(HISTORY_DIR):
+        os.makedirs(HISTORY_DIR)
+
+    timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M-%S")
+    filename = f"{timestamp}.txt"
+    file_path = os.path.join(HISTORY_DIR, filename)
+
+    try:
+        with open(file_path, "w", encoding="utf-8") as f:
+            f.write(f"=== ИСТОРИЯ ЗАГРУЗКИ ===\n")
+            f.write(f"Дата и время: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
+            f.write(f"Тип файла: {download_type}\n")
+            f.write(f"Поиск: {query}\n")
+            f.write(f"Папка сохранения: {saved_path}\n")
+    except Exception as e:
+        print(f"Не удалось записать историю в файл: {e}")
+
+def view_history():
+    if not os.path.exists(HISTORY_DIR) or not os.listdir(HISTORY_DIR):
+        print("\nИстория загрузок пуста.")
+        input("\nНажмите Enter, чтобы вернуться в меню...")
+        return
+
+    files = sorted(os.listdir(HISTORY_DIR))
+    
+    print("\n=== История загрузок (файлы с логами) ===")
+    for idx, file in enumerate(files, 1):
+        print(f"{idx}. {file}")
+    print(f"{len(files) + 1}. Назад в меню")
+
+    try:
+        choice = int(input("\nВыберите номер файла для просмотра информации:\n>>> "))
+        if 1 <= choice <= len(files):
+            selected_file = files[choice - 1]
+            full_path = os.path.join(HISTORY_DIR, selected_file)
+            
+            print("\n----------------------------------------")
+            with open(full_path, "r", encoding="utf-8") as f:
+                print(f.read())
+            print("----------------------------------------")
+            input("Нажмите Enter для возврата...")
+        else:
+            return
+    except ValueError:
+        print("Некорректный ввод.")
+
 
 def load_config():
     if os.path.exists(CONFIG_FILE):
@@ -57,6 +108,7 @@ def download_video(search_query):
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([search_query])
         print(f"Done! Saved to: {output_dir}")
+        save_to_history("Видео", search_query, output_dir)
     except Exception as e:
         print(f"Error: {e}")
 
@@ -81,6 +133,7 @@ def download_audio(search_query):
         with yt_dlp.YoutubeDL(ydl_opts) as ydl:
             ydl.download([search_query])
         print(f"Done! Saved to: {output_dir}")
+        save_to_history("Аудио", search_query, output_dir)
     except Exception as e:
         print("Error: {e}")
 
@@ -98,6 +151,7 @@ if __name__ == '__main__':
                                 
             4. Edit download path (Изменить путь скачивания)
             5. Check download path (Проверить путь скачивания)
+            6. View download history (Посмотреть историю загрузок)
                                    
             0. Exit
                                    
@@ -170,6 +224,9 @@ if __name__ == '__main__':
             elif user_input == 5:
                 print(f"\nVideo: {config['video_path']}\nAudio: {config['audio_path']}\n")
                 input("Press Enter to continue...")
+
+            elif user_input == 6:
+                view_history()
 
         except ValueError:
             print("Некорректное число...")
