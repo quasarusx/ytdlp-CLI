@@ -98,8 +98,8 @@ def download_video(search_query):
     
     ydl_opts = {
         'format': 'bestvideo[height<=2048]+bestaudio/best[height<=2048]',
-        'merge_output_format': 'mkv',
-        'recode_video': 'mkv',
+        'merge_output_format': 'mp4',
+        'recode_video': 'mp4',
         'outtmpl': os.path.join(output_dir, '%(title)s.%(ext)s'),
         'default_search': 'ytsearch',
         'quiet': True
