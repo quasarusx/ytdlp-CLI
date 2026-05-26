@@ -97,7 +97,9 @@ def download_video(search_query):
         os.makedirs(output_dir)
     
     ydl_opts = {
-        'format': 'bestvideo[height<=1080]+bestaudio/best[height<=1080]',
+        'format': 'bestvideo[height<=2048]+bestaudio/best[height<=2048]',
+        'merge_output_format': 'mkv',
+        'recode_video': 'mkv',
         'outtmpl': os.path.join(output_dir, '%(title)s.%(ext)s'),
         'default_search': 'ytsearch',
         'quiet': True
@@ -123,6 +125,8 @@ def download_audio(search_query):
 
     ydl_opts = {
         'format': 'bestaudio[ext=mp3]/bestaudio[ext=webm]/best',
+        'merge_output_format': 'webm',
+        'recode_audio': 'webm',
         'outtmpl': os.path.join(output_dir, '%(title)s.%(ext)s'),
         'default_search': 'ytsearch',
         'quiet': True,
@@ -232,4 +236,3 @@ if __name__ == '__main__':
             print("Некорректное число...")
         except Exception as e:
             print(f"Произошла непредвиденная ошибка: {e}")
-
