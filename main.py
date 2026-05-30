@@ -68,13 +68,18 @@ def load_config():
     if os.path.exists(CONFIG_FILE):
         try:
             with open(CONFIG_FILE, "r", encoding="utf-8") as f:
-                return json.load(f)
+                current_config = json.load(f)
+                if "proxy" not in current_config:
+                    current_config["proxy"] = ""
+                    save_config(current_config)
+                return current_config
         except json.JSONDecodeError:
             print("Ошибка чтения config.json, создаем новый...")
 
     default_config = {
         "video_path": DEFAULT_VIDEO_PATH,
-        "audio_path": DEFAULT_AUDIO_PATH
+        "audio_path": DEFAULT_AUDIO_PATH,
+        "proxy": ""
     }
     save_config(default_config)
     return default_config
@@ -102,8 +107,15 @@ def download_video(search_query):
         'recode_video': 'mkv',
         'outtmpl': os.path.join(output_dir, '%(title)s.%(ext)s'),
         'default_search': 'ytsearch',
-        'quiet': True
+        'quiet': True,
+        'proxy': ''
     }
+
+
+    user_proxy = config.get("proxy", "")
+    if user_proxy:
+        ydl_opts['proxy'] = user_proxy
+
 
     print(f'\nDownloading: {search_query}')
     try:
@@ -128,7 +140,14 @@ def download_audio(search_query):
         'outtmpl': os.path.join(output_dir, '%(title)s.%(ext)s'),
         'default_search': 'ytsearch',
         'quiet': True,
+        'proxy': ''
     }
+    
+
+    user_proxy = config.get("proxy", "")
+    if user_proxy:
+        ydl_opts['proxy'] = user_proxy
+
 
     print(f"\nDownloading: {search_query}")
     try:
@@ -164,6 +183,8 @@ if __name__ == '__main__':
             4. Edit download path (Изменить путь скачивания)
             5. Check download path (Проверить путь скачивания)
             6. View download history (Посмотреть историю загрузок)
+                                   
+            7. Proxy (Прокси)
                                    
             0. Exit
                                    
@@ -262,6 +283,26 @@ if __name__ == '__main__':
 
             elif user_input == 6:
                 view_history()
+
+            elif user_input == 7:
+                user_proxy_input = int(input("""
+                1. Add proxy (Добавить прокси)
+                2. Delete proxy (Удалить прокси)
+                                   
+                >>> """))
+                if user_proxy_input == 1:
+                    user_proxy = input("""
+                Enter proxy (Введите прокси)
+                                       
+                >>> """)
+                    config["proxy"] = user_proxy
+                    print(f"Готово! Ваш прокси: {config["proxy"]}")
+                    save_config(config)
+                
+                elif user_proxy_input == 2:
+                    config["proxy"] = ""
+                    print("Proxy removed (Прокси удален)")
+                    save_config(config)
 
         except ValueError:
             print("Некорректное число...")
