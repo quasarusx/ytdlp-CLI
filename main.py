@@ -139,6 +139,16 @@ def download_audio(search_query):
     except Exception as e:
         print("Error: {e}")
 
+
+def download_multiple_audio(txtfile):
+    list_of_txt = []
+    with open(txtfile, "r", encoding="utf-8") as f:
+        for i in f:
+            list_of_txt.append(i)
+    for i in list_of_txt:
+        download_audio(i)
+
+
 if __name__ == '__main__':
     while True:
         try:
@@ -171,13 +181,36 @@ if __name__ == '__main__':
                     download_video(user_video_input)
 
             elif user_input == 2:
-                user_audio_input = input("""
+                user_audio_choise = int(input("""
+                1. Single download (Единичное скачивание)
+                2. Multiple download (Множественное скачивание)
+                      
+                >>> """))
+                if user_audio_choise == 1:
+                    user_audio_input = input("""
                 Enter the URL or title of the audio
-                Введите URL адрес или название трека
-                                        
+                Введите URL адрес или название аудио    
+
                 >>> """)
-                if user_audio_input:
-                    download_audio(user_audio_input)
+                    if user_audio_input:
+                        download_audio(user_audio_input)
+                elif user_audio_choise == 2:
+                    print("""
+                Select a txt file with a list of audio files
+                Выберите файл в формате txt со списком аудио          
+                >>> """)
+                    file = filedialog.askopenfilename(
+                        title="Выберите текстовый файл",
+                        filetypes=[("Текстовые файлы", "*.txt")]
+                    )
+                    print(f"""
+                You`ve selected: {file}
+                >>> """)
+                
+                download_multiple_audio(file)
+                    
+
+
 
             elif user_input == 0:
                 print("Exit...")
